@@ -36,8 +36,8 @@ jobs:
         uses: "symplify/monorepo-split-github-action@2.1"
         with:
           package_directory: 'packages/${{ matrix.package.local_path }}'
-          split_repository_organization: 'yann-eugone'
-          split_repository_name: '${{ matrix.package.split_repository }}'
+          repository_organization: 'yann-eugone'
+          repository_name: '${{ matrix.package.split_repository }}'
           user_name: "GitHub Action"
           user_email: "action@github.com"
           branch: "main"
@@ -50,8 +50,8 @@ jobs:
           tag: ${GITHUB_REF#refs/tags/}
 
           package_directory: 'packages/${{ matrix.package.local_path }}'
-          split_repository_organization: 'yann-eugone'
-          split_repository_name: '${{ matrix.package.split_repository }}'
+          repository_organization: 'yann-eugone'
+          repository_name: '${{ matrix.package.split_repository }}'
           user_name: "GitHub Action"
           user_email: "action@github.com"
           branch: "main"
