@@ -1,3 +1,3 @@
 <?php
 
-echo "Legacy Thing in Split VB";
+echo "Legacy Thing in Split B";
