@@ -33,25 +33,25 @@ jobs:
       # on branches
       -
         if: "!startsWith(github.ref, 'refs/tags/')"
-        uses: "symplify/monorepo-split-github-action@2.0"
+        uses: "symplify/monorepo-split-github-action@2.1"
         with:
-          package-directory: 'packages/${{ matrix.package.local_path }}'
-          split-repository-organization: 'yann-eugone'
-          split-repository-name: '${{ matrix.package.split_repository }}'
-          user-name: "GitHub Action"
-          user-email: "action@github.com"
+          package_directory: 'packages/${{ matrix.package.local_path }}'
+          split_repository_organization: 'yann-eugone'
+          split_repository_name: '${{ matrix.package.split_repository }}'
+          user_name: "GitHub Action"
+          user_email: "action@github.com"
           branch: "main"
 
       # on tags
       -
         if: "startsWith(github.ref, 'refs/tags/')"
-        uses: "symplify/monorepo-split-github-action@2.0"
+        uses: "symplify/monorepo-split-github-action@2.1"
         with:
           tag: ${GITHUB_REF#refs/tags/}
 
-          package-directory: 'packages/${{ matrix.package.local_path }}'
-          split-repository-organization: 'yann-eugone'
-          split-repository-name: '${{ matrix.package.split_repository }}'
-          user-name: "GitHub Action"
-          user-email: "action@github.com"
+          package_directory: 'packages/${{ matrix.package.local_path }}'
+          split_repository_organization: 'yann-eugone'
+          split_repository_name: '${{ matrix.package.split_repository }}'
+          user_name: "GitHub Action"
+          user_email: "action@github.com"
           branch: "main"
