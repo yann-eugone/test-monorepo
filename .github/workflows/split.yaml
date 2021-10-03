@@ -10,7 +10,6 @@ on:
 env:
   GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
-
 jobs:
   packages_split:
     name: "Packages Split"
