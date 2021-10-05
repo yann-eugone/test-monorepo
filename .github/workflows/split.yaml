@@ -28,30 +28,18 @@ jobs:
             split_repository: 'test-monorepo-split-b'
 
     steps:
-      -   uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
       # on branches
       -
         if: "!startsWith(github.ref, 'refs/tags/')"
-        uses: "symplify/monorepo-split-github-action@2.1"
-        with:
-          package_directory: 'packages/${{ matrix.package.local_path }}'
-          repository_organization: 'yann-eugone'
-          repository_name: '${{ matrix.package.split_repository }}'
-          user_name: "GitHub Action"
-          user_email: "action@github.com"
-          branch: "main"
+        shell: bash
+        run: |
+          ./bin/split-branch.sh ${GITHUB_REF}
 
       # on tags
       -
         if: "startsWith(github.ref, 'refs/tags/')"
-        uses: "symplify/monorepo-split-github-action@2.1"
-        with:
-          tag: ${GITHUB_REF#refs/tags/}
-
-          package_directory: 'packages/${{ matrix.package.local_path }}'
-          repository_organization: 'yann-eugone'
-          repository_name: '${{ matrix.package.split_repository }}'
-          user_name: "GitHub Action"
-          user_email: "action@github.com"
-          branch: "main"
+        shell: bash
+        run: |
+          ./bin/split-tag.sh ${GITHUB_REF#refs/tags/}
