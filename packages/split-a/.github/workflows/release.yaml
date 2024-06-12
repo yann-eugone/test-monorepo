@@ -16,4 +16,7 @@ jobs:
       - name: Release
         uses: "softprops/action-gh-release@v2"
         with:
+          body: >
+            See release in the main repository
+            [`${{ github.ref_name }}`](https://github.com/yann-eugone/test-monorepo/releases/tag/${{ github.ref_name }})
           generate_release_notes: true
