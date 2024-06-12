@@ -5,7 +5,7 @@ on:
     branches:
       - main
   release:
-    types: [published]
+    types: [ published ]
 
 jobs:
   packages_split:
@@ -15,19 +15,6 @@ jobs:
     steps:
       - name: "Checkout code"
         run: git clone https://github.com/yann-eugone/test-monorepo /home/runner/work/yann-eugone/test-monorepo && cd $_
-
-      - name: "Docker cache"
-        uses: satackey/action-docker-layer-caching@v0.0.8
-        continue-on-error: true
-        with:
-          key: docker-{hash}
-          restore-keys: docker-
-      - name: "Gitsplit cache"
-        uses: actions/cache@v2
-        with:
-          path: cache/gitsplit
-          key: gitsplit-${{ github.sha }}
-          restore-keys: gitsplit-
 
       - name: "Gitsplit"
         run: docker run --rm -t -e GH_TOKEN -v /cache/gitsplit:/cache/gitsplit -v /home/runner/work/yann-eugone/test-monorepo:/srv jderusse/gitsplit gitsplit
