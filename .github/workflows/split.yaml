@@ -4,37 +4,21 @@ on:
   push:
     branches:
       - main
-    tags:
-      - '*'
+  release:
+    types: [published]
 
 env:
   GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
 jobs:
-  packages_split:
-    name: "Packages Split"
-    runs-on: "ubuntu-latest"
-
+  gitsplit:
+    runs-on: ubuntu-latest
     steps:
       - name: checkout
-        run: git clone https://github.com/yann-eugone/test-monorepo /home/runner/work/yann-eugone/test-monorepo && cd $_
-
-      - name: docker-cache
-        uses: satackey/action-docker-layer-caching@v0.0.8
-        continue-on-error: true
+        run: git clone https://github.com/yann-eugone/test-monorepo /home/runner/work/org/project && cd /home/runner/work/org/project
+      - name: Split repositories
+        uses: docker://jderusse/gitsplit:latest
         with:
-          key: docker-{hash}
-          restore-keys: docker-
-      - name: gitsplit-cache
-        uses: actions/cache@v2
-        with:
-          path: cache/gitsplit
-          key: gitsplit-${{ github.sha }}
-          restore-keys: gitsplit-
-
-      - name: prepare gitsplit
-        run: cp /home/runner/work/yann-eugone/test-monorepo/.github/.gitsplit.yml /home/runner/work/yann-eugone/test-monorepo/.gitsplit.yml
-      - name: gitsplit-older
-        run: docker run --rm -t -e GH_TOKEN -v /cache/gitsplit:/cache/gitsplit -v /home/runner/work/yann-eugone/test-monorepo:/srv jderusse/gitsplit gitsplit
+          args: gitsplit
         env:
           GH_TOKEN: ${{ secrets.PRIVATE_TOKEN }}
