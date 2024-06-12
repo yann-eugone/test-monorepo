@@ -1,0 +1,16 @@
+# Path to a cache directory Used to speed up the split over time by reusing git's objects
+cache_url: "cache/gitsplit/"
+
+# List of splits.
+splits:
+  -
+    prefix: "packages/split-a"
+    target: "https://${GH_TOKEN}@github.com/yann-eugone/test-monorepo-split-a.git"
+  -
+    prefix: "packages/split-b"
+    target: "https://${GH_TOKEN}@github.com/yann-eugone/test-monorepo-split-b.git"
+
+# List of references to split (defined as regexp)
+origins:
+  - ^(main)$
+  - ^v\d+\.\d+\.\d+$

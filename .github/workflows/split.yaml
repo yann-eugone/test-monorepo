@@ -15,31 +15,26 @@ jobs:
     name: "Packages Split"
     runs-on: "ubuntu-latest"
 
-    strategy:
-      fail-fast: false
-      matrix:
-        # define package to repository map
-        package:
-          -
-            local_path: 'split-a'
-            split_repository: 'test-monorepo-split-a'
-          -
-            local_path: 'split-b'
-            split_repository: 'test-monorepo-split-b'
-
     steps:
-      - uses: actions/checkout@v2
+      - name: checkout
+        run: git clone https://github.com/yann-eugone/test-monorepo /home/runner/work/yann-eugone/test-monorepo && cd $_
 
-      # on branches
-      -
-        if: "!startsWith(github.ref, 'refs/tags/')"
-        shell: bash
-        run: |
-          ./bin/split-branch.sh ${GITHUB_REF}
+      - name: docker-cache
+        uses: satackey/action-docker-layer-caching@v0.0.8
+        continue-on-error: true
+        with:
+          key: docker-{hash}
+          restore-keys: docker-
+      - name: gitsplit-cache
+        uses: actions/cache@v2
+        with:
+          path: cache/gitsplit
+          key: gitsplit-${{ github.sha }}
+          restore-keys: gitsplit-
 
-      # on tags
-      -
-        if: "startsWith(github.ref, 'refs/tags/')"
-        shell: bash
-        run: |
-          ./bin/split-tag.sh ${GITHUB_REF#refs/tags/}
+      - name: prepare gitsplit
+        run: cp /home/runner/work/yann-eugone/test-monorepo/.github/.gitsplit.yml /home/runner/work/yann-eugone/test-monorepo/.gitsplit.yml
+      - name: gitsplit-older
+        run: docker run --rm -t -e GH_TOKEN -v /cache/gitsplit:/cache/gitsplit -v /home/runner/work/yann-eugone/test-monorepo:/srv jderusse/gitsplit gitsplit
+        env:
+          GH_TOKEN: ${{ secrets.PRIVATE_TOKEN }}
